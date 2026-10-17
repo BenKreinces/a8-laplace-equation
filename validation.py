@@ -14,4 +14,5 @@ mask[:,-1] = True
 V = np.zeros((N,N))
 V[mask] = 1
 Vfinal, iterations, diff = relaxation.solver(V, mask, 1e-6, 100000)
-print(Vfinal)
+error = np.max(np.abs(Vfinal[~mask]-1))
+print(error)
