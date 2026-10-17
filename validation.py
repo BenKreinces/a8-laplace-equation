@@ -16,3 +16,13 @@ V[mask] = 1
 Vfinal, iterations, diff = relaxation.solver(V, mask, 1e-6, 100000)
 error = np.max(np.abs(Vfinal[~mask]-1))
 print(error)
+
+
+V2 = np.zeros((N,N))
+vals = X/L
+V2[mask] = vals[mask]
+Vfinal2, iterations2, diff2 = relaxation.solver(V2, mask, 1e-6, 100000)
+error2 = np.max(np.abs(Vfinal2[~mask]-vals[~mask]))
+print(error2)
+
+
