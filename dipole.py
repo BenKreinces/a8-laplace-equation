@@ -25,55 +25,6 @@ h = L/N
 x = np.linspace(h/2, L-h/2, N)
 y = np.linspace(h/2, L-h/2, N)
 X , Y = np.meshgrid(x,y,indexing="ij")
-#Geometry A
-mask1 = np.zeros((N,N), dtype=bool)
-mask1[0,:] = True
-mask1[-1,:] = True
-mask1[:,0] = True
-mask1[:,-1] = True
-V1 = np.zeros((N,N))
-V1[:,-1] = 1
-
-plot(V1, mask1)
-
-#Geometry B
-mask2 = np.zeros((N,N), dtype=bool)
-mask2[0,:] = True
-mask2[-1,:] = True
-mask2[:,0] = True
-mask2[:,-1] = True
-V2 = np.zeros((N,N))
-V2[:,-1] = 1
-V2[0,:] = -0.5
-V2[:,0] = 0
-V2[-1,:] = 0.2
-
-plot(V2, mask2)
-
-
-#Geometry C
-mask3 = np.zeros((N,N), dtype=bool)
-mask3[0,:] = True
-mask3[-1,:] = True
-mask3[:,0] = True
-mask3[:,-1] = True
-
-
-r = np.sqrt((X-L/2)**2 + (Y-L/2)**2)
-R = L/3
-t = 0.05*L
-shellCells = (r>= R-t/2) & (r<= R+t/2)
-mask3[shellCells] = True
-
-
-V3 = np.zeros((N,N))
-V3[:,-1] = 5
-V3[0,:] = 5
-V3[:,0] = 5
-V3[-1,:] = 5
-V3[shellCells & (Y>=L/2)] = 10
-V3[shellCells & (Y<L/2)] = -10
-plot(V3, mask3)
 
 #Geometry D
 mask4 = np.zeros((N,N), dtype=bool)
