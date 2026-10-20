@@ -9,15 +9,22 @@ def plot(V1, mask):
     V1[-1,-1] = (V1[-1,-2] + V1[-2,-1]) / 2
     Vfinal1, iterations1, diff1 = relaxation.solver(V1, mask, 1e-6, 100000)
     plt.imshow(Vfinal1.T, origin="lower", aspect="equal")
+    plt.colorbar(label = "Potential V")
+    plt.tight_layout()
     plt.xlabel('x')
     plt.ylabel('y')
+    plt.savefig('oneEdgeHeatmap.png')
     plt.show()
-
-    plt.contour(X, Y, Vfinal1, levels=12)
+    
+    contours = plt.contour(X, Y, Vfinal1, levels=12)
+    plt.clabel(contours, inline = True, fontsize = 8)
+    plt.tight_layout()
     plt.xlabel("x")
     plt.ylabel("y")
     plt.gca().set_aspect("equal")
+    plt.savefig('oneEdgeContour.png')
     plt.show()
+
 
 N=100
 L=1

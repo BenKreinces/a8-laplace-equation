@@ -9,14 +9,19 @@ def plot(V1, mask):
     V1[-1,-1] = (V1[-1,-2] + V1[-2,-1]) / 2
     Vfinal1, iterations1, diff1 = relaxation.solver(V1, mask, 1e-6, 100000)
     plt.imshow(Vfinal1.T, origin="lower", aspect="equal")
+    plt.colorbar(label = "Potential V")
+    plt.tight_layout()
     plt.xlabel('x')
     plt.ylabel('y')
+    plt.savefig('fourEdgeHeatmap.png')
     plt.show()
-
-    plt.contour(X, Y, Vfinal1, levels=12)
+    contours = plt.contour(X, Y, Vfinal1, levels=12)
+    plt.clabel(contours, inline = True, fontsize = 8)
+    plt.tight_layout()
     plt.xlabel("x")
     plt.ylabel("y")
     plt.gca().set_aspect("equal")
+    plt.savefig('fourEdgeContour.png')
     plt.show()
 
 N=100
@@ -25,16 +30,6 @@ h = L/N
 x = np.linspace(h/2, L-h/2, N)
 y = np.linspace(h/2, L-h/2, N)
 X , Y = np.meshgrid(x,y,indexing="ij")
-#Geometry A
-mask1 = np.zeros((N,N), dtype=bool)
-mask1[0,:] = True
-mask1[-1,:] = True
-mask1[:,0] = True
-mask1[:,-1] = True
-V1 = np.zeros((N,N))
-V1[:,-1] = 1
-
-plot(V1, mask1)
 
 #Geometry B
 mask2 = np.zeros((N,N), dtype=bool)
