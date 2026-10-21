@@ -1,7 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path
-from plot_results import plot
+import relaxation
+Path("data").mkdir(exist_ok=True)
 
 N=100
 L=1
@@ -33,4 +33,7 @@ V3[-1,:] = 5
 V3[shellCells & (Y>=L/2)] = 10
 V3[shellCells & (Y<L/2)] = -10
 
-plot(V3, mask3, "splitShell")
+Vfinal, iterations, diff = relaxation.solver(V3, mask3, 1e-6, 100000)
+
+np.savetxt("data/splitShell.csv", np.column_stack((X.ravel(), Y.ravel(), Vfinal.ravel())), delimiter=",", header="x,y,V")
+print("splitShell:", "iterations =", iterations, "final difference =", diff)

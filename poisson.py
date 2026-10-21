@@ -1,7 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from plot_results import plot
-
+import relaxation
+from pathlib import Path
+Path ("data") . mkdir ( exist_ok = True )
 N=100
 L=1
 h = L/N
@@ -21,5 +21,14 @@ V3[:,-1] = 0
 V3[0,:] = 0
 V3[:,0] = 0
 V3[-1,:] = 0
-plot(V3, mask3, "poisson", source, h)
+
+
+Vfinal, iterations, diff = relaxation.solver(V3, mask3, 1e-6, 100000, source=source, h=h)
+np.savetxt("data/poisson.csv", np.column_stack((X.ravel(), Y.ravel(), Vfinal.ravel())),delimiter=",", header="x,y,V")
+print(f"possion: iterations = {iterations}, final difference = {diff}")
+i, j = np.unravel_index(np.argmax(Vfinal), Vfinal.shape)
+print(f"Maximum potential:{Vfinal[i,j]} at{(X[i,j], Y[i,j])}")
+Vzero, _, _ = relaxation.solver(np.zeros_like(V3), mask3, 1e-6, 100000, h=h)
+print(f"Zero-source maximum absolute potential: {np.max(np.abs(Vzero))}")
+
 

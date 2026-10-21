@@ -1,6 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from plot_results import plot
+from pathlib import Path
+import relaxation
+Path("data").mkdir(exist_ok=True)
 N=100
 L=1
 h = L/N
@@ -16,4 +17,6 @@ mask1[:,-1] = True
 V1 = np.zeros((N,N))
 V1[:,-1] = 1
 
-plot(V1, mask1, "oneEdge")
+Vfinal, iterations, diff = relaxation.solver(V1, mask1, 1e-6, 100000)
+np.savetxt("data/oneEdge.csv", np.column_stack((X.ravel(), Y.ravel(), Vfinal.ravel())),delimiter=",", header="x,y,V")
+print(f"oneEdge: iterations = {iterations}, final difference = {diff}")

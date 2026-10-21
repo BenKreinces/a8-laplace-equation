@@ -3,31 +3,41 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 Path ("plots") . mkdir ( exist_ok = True )
-N=100
-L=1
-h = L/N
-x = np.linspace(h/2, L-h/2, N)
-y = np.linspace(h/2, L-h/2, N)
-X , Y = np.meshgrid(x,y,indexing="ij")
-def plot(V1, mask, name, source = None, h = h):
-    V1[0,0] = (V1[0,1] + V1[1,0]) / 2
-    V1[-1,0] = (V1[-1,1] + V1[-2,0]) / 2
-    V1[0,-1] = (V1[0,-2] + V1[1,-1]) / 2
-    V1[-1,-1] = (V1[-1,-2] + V1[-2,-1]) / 2
-    Vfinal1, iterations1, diff1 = relaxation.solver(V1, mask, 1e-6, 100000, source=source, h=h)
+
+def plot(name):
+    data = np.loadtxt(f"data/{name}.csv", delimiter=",", skiprows=1)
+    x = np.unique(data[:, 0])
+    y = np.unique(data[:, 1])
+    V = data[:, 2].reshape((len(x), len(y)))
+    X, Y = np.meshgrid(x, y, indexing="ij")
+    h = x[1] - x[0]
+    L = len(x) * h
     extent = [x[0]-h/2, x[-1]+h/2, y[0]-h/2, y[-1]+h/2]
-    plt.imshow(Vfinal1.T, origin="lower", extent=extent, aspect="equal")
-    plt.colorbar(label = "Potential V")
+    plt.figure(figsize=(6, 5))
+    plt.imshow(V.T, origin="lower", extent=extent, aspect="equal")
+    plt.colorbar(label="Potential V")
+    if name == "dipole":
+        plt.scatter([L/3, 2*L/3], [L/2, L/2], c="black", s=20)
+        plt.contour(X, Y, V, levels=[0], colors="red", linewidths=1)
+    plt.xlabel("x")
+    plt.ylabel("y")
     plt.tight_layout()
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.savefig(f'plots/{name}Heatmap.png')
-    plt.show()
-    contours = plt.contour(X, Y, Vfinal1, levels=12)
-    plt.clabel(contours, inline = True, fontsize = 8)
-    plt.tight_layout()
+    plt.savefig(f"plots/{name}Heatmap.png", dpi=200)
+    plt.close()
+    plt.figure(figsize=(6, 5))
+    contours = plt.contour(X, Y, V, levels=12)
+    plt.clabel(contours, inline=True, fontsize=8)
+    if name == "dipole":
+        plt.contour(X, Y, V, levels=[0], colors="red", linewidths=2)
+        plt.scatter([L/3, 2*L/3], [L/2, L/2], c=["red", "blue"], s=30)
+    plt.xlim(0, L)
+    plt.ylim(0, L)
     plt.xlabel("x")
     plt.ylabel("y")
     plt.gca().set_aspect("equal")
-    plt.savefig(f'plots/{name}Contour.png')
-    plt.show()
+    plt.tight_layout()
+    plt.savefig(f"plots/{name}Contour.png", dpi=200)
+    plt.close()
+if __name__ == "__main__":
+    for name in ("oneEdge", "fourEdge", "splitShell", "dipole", "poisson"):
+        plot(name)

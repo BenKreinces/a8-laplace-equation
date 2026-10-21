@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from plot_results import plot
-
+import relaxation
+from pathlib import Path
+Path("data").mkdir(exist_ok=True)
 N=100
 L=1
 h = L/N
@@ -28,4 +29,8 @@ mask4[shellCells2] = True
 V4 = np.zeros((N,N))
 V4[shellCells1] = 1
 V4[shellCells2] = -1
-plot(V4, mask4, "dipole")
+Vfinal, iterations, diff = relaxation.solver(V4, mask4, 1e-6, 100000)
+
+np.savetxt("data/dipole.csv", np.column_stack((X.ravel(), Y.ravel(), Vfinal.ravel())),
+           delimiter=",", header="x,y,V")
+print(f"dipole: iterations = {iterations}, final difference = {diff}")

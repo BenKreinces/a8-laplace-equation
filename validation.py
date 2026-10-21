@@ -25,4 +25,5 @@ Vfinal2, iterations2, diff2 = relaxation.solver(V2, mask, 1e-6, 100000)
 error2 = np.max(np.abs(Vfinal2[~mask]-vals[~mask]))
 print(error2)
 
-
+print(f"Constant boundary unchanged: {np.array_equal(Vfinal[mask], V[mask])}")
+print(f"Linear boundary unchanged: {np.array_equal(Vfinal2[mask], V2[mask])}")
