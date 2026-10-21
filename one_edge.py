@@ -16,6 +16,10 @@ mask1[:,0] = True
 mask1[:,-1] = True
 V1 = np.zeros((N,N))
 V1[:,-1] = 1
+V1[0,0] = (V1[0,1] + V1[1,0])/2
+V1[-1,0] = (V1[-1,1] + V1[-2,0])/2
+V1[0,-1] = (V1[0,-2] + V1[1,-1])/2
+V1[-1,-1] = (V1[-1,-2] + V1[-2,-1])/2
 
 Vfinal, iterations, diff = relaxation.solver(V1, mask1, 1e-6, 100000)
 np.savetxt("data/oneEdge.csv", np.column_stack((X.ravel(), Y.ravel(), Vfinal.ravel())),delimiter=",", header="x,y,V")

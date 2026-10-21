@@ -20,6 +20,10 @@ V2[:,-1] = 1
 V2[0,:] = -0.5
 V2[:,0] = 0
 V2[-1,:] = 0.2
+V2[0,0] = (V2[0,1] + V2[1,0])/2
+V2[-1,0] = (V2[-1,1] + V2[-2,0])/2
+V2[0,-1] = (V2[0,-2] + V2[1,-1])/2
+V2[-1,-1] = (V2[-1,-2] + V2[-2,-1])/2
 Vfinal, iterations, diff = relaxation.solver(V2, mask2, 1e-6, 100000)
 np.savetxt("data/fourEdge.csv", np.column_stack((X.ravel(), Y.ravel(), Vfinal.ravel())), delimiter=",", header="x,y,V", comments="")
 print(f"fourEdge: iterations = {iterations}, final difference = {diff}")
